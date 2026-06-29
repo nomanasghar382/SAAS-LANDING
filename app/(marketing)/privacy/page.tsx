@@ -1,4 +1,5 @@
 import { marketingMetadata } from "@/lib/metadata";
+import { SITE_OWNER } from "@/constants/site";
 
 export const metadata = marketingMetadata(
   "Privacy Policy",
@@ -38,7 +39,14 @@ export default function PrivacyPage() {
         <section>
           <h2 className="text-lg font-semibold text-foreground">Contact</h2>
           <p className="mt-2 leading-relaxed">
-            For privacy inquiries, contact us at privacy@sellpilot.ai.
+            For privacy inquiries, contact{" "}
+            <a
+              href={`mailto:${SITE_OWNER.email}`}
+              className="text-primary hover:underline"
+            >
+              {SITE_OWNER.email}
+            </a>{" "}
+            ({SITE_OWNER.name}).
           </p>
         </section>
       </div>

@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { ROUTES } from "@/constants/routes";
+import { SITE_OWNER } from "@/constants/site";
 import { env } from "@/lib/env";
 
 const footerLinks = {
@@ -18,8 +19,8 @@ export function Footer() {
   return (
     <footer className="border-t bg-muted/30">
       <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
-        <div className="grid gap-8 md:grid-cols-4">
-          <div className="md:col-span-2">
+        <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-5">
+          <div className="sm:col-span-2">
             <Link href={ROUTES.home} className="flex items-center gap-2">
               <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary text-sm font-bold text-primary-foreground">
                 SP
@@ -49,6 +50,29 @@ export function Footer() {
           </div>
 
           <div>
+            <h3 className="text-sm font-semibold">Contact</h3>
+            <ul className="mt-4 space-y-2 text-sm text-muted-foreground">
+              <li className="font-medium text-foreground">{SITE_OWNER.name}</li>
+              <li>
+                <a
+                  href={`mailto:${SITE_OWNER.email}`}
+                  className="hover:text-foreground ds-transition"
+                >
+                  {SITE_OWNER.email}
+                </a>
+              </li>
+              <li>
+                <a
+                  href={`tel:${SITE_OWNER.phoneTel}`}
+                  className="hover:text-foreground ds-transition"
+                >
+                  {SITE_OWNER.phoneDisplay}
+                </a>
+              </li>
+            </ul>
+          </div>
+
+          <div>
             <h3 className="text-sm font-semibold">Legal</h3>
             <ul className="mt-4 space-y-2">
               {footerLinks.legal.map((link) => (
@@ -66,7 +90,8 @@ export function Footer() {
         </div>
 
         <div className="mt-12 border-t pt-8 text-center text-sm text-muted-foreground">
-          © {new Date().getFullYear()} {env.NEXT_PUBLIC_APP_NAME}. All rights reserved.
+          © {new Date().getFullYear()} {env.NEXT_PUBLIC_APP_NAME}. Founded by{" "}
+          {SITE_OWNER.name}. All rights reserved.
         </div>
       </div>
     </footer>

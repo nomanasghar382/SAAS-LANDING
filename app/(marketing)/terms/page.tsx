@@ -1,4 +1,5 @@
 import { marketingMetadata } from "@/lib/metadata";
+import { SITE_OWNER } from "@/constants/site";
 
 export const metadata = marketingMetadata(
   "Terms of Service",
@@ -37,7 +38,14 @@ export default function TermsPage() {
         <section>
           <h2 className="text-lg font-semibold text-foreground">Contact</h2>
           <p className="mt-2 leading-relaxed">
-            For questions about these terms, contact legal@sellpilot.ai.
+            For questions about these terms, contact{" "}
+            <a
+              href={`mailto:${SITE_OWNER.email}`}
+              className="text-primary hover:underline"
+            >
+              {SITE_OWNER.email}
+            </a>{" "}
+            ({SITE_OWNER.name}).
           </p>
         </section>
       </div>
