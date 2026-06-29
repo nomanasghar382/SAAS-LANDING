@@ -3,6 +3,7 @@ import { NextResponse } from "next/server";
 
 const publicRoutes = ["/", "/pricing", "/about", "/contact"];
 const authRoutes = ["/login", "/signup", "/forgot-password"];
+const publicApiRoutes = ["/api/auth"];
 
 export default auth((req) => {
   const { pathname } = req.nextUrl;
@@ -12,8 +13,17 @@ export default auth((req) => {
   const isAuthRoute = authRoutes.some((route) => pathname.startsWith(route));
   const isDashboardRoute = pathname.startsWith("/dashboard");
   const isApiRoute = pathname.startsWith("/api");
+  const isPublicApi = publicApiRoutes.some((route) =>
+    pathname.startsWith(route)
+  );
 
-  if (isApiRoute) return NextResponse.next();
+  if (isApiRoute) {
+    if (isPublicApi) return NextResponse.next();
+    if (!isLoggedIn) {
+      return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
+    }
+    return NextResponse.next();
+  }
 
   if (isDashboardRoute && !isLoggedIn) {
     const loginUrl = new URL("/login", req.nextUrl.origin);

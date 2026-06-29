@@ -5,27 +5,16 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { ROUTES } from "@/constants/routes";
 import { formatCurrency, formatDate } from "@/utils/format";
-import type { Campaign, CampaignStatus } from "@/types";
-
-const statusVariants: Record<
-  CampaignStatus,
-  "default" | "secondary" | "success" | "warning"
-> = {
-  draft: "secondary",
-  active: "success",
-  paused: "warning",
-  completed: "default",
-};
+import { campaignStatusVariants } from "@/constants/status-variants";
+import type { Campaign } from "@/types";
+import { getConversionRate } from "@/utils/crm";
 
 interface CampaignCardProps {
   campaign: Campaign;
 }
 
 export function CampaignCard({ campaign }: CampaignCardProps) {
-  const conversionRate =
-    campaign.leads > 0
-      ? ((campaign.conversions / campaign.leads) * 100).toFixed(1)
-      : "0";
+  const conversionRate = getConversionRate(campaign.leads, campaign.conversions);
 
   return (
     <Link href={`${ROUTES.campaigns}/${campaign.id}`}>
@@ -35,7 +24,7 @@ export function CampaignCard({ campaign }: CampaignCardProps) {
             <CardTitle className="text-base leading-tight">
               {campaign.name}
             </CardTitle>
-            <Badge variant={statusVariants[campaign.status]}>
+            <Badge variant={campaignStatusVariants[campaign.status]}>
               {campaign.status}
             </Badge>
           </div>

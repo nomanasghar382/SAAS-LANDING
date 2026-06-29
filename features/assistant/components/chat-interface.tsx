@@ -125,7 +125,11 @@ export function ChatInterface() {
           className="mx-auto flex max-w-2xl items-end gap-2"
         >
           <div className="relative flex-1">
+            <label htmlFor="assistant-message" className="sr-only">
+              Message SellPilot AI
+            </label>
             <textarea
+              id="assistant-message"
               value={input}
               onChange={(e) => setInput(e.target.value)}
               onKeyDown={(e) => {
@@ -145,6 +149,7 @@ export function ChatInterface() {
             size="icon"
             disabled={isStreaming || !input.trim()}
             className="h-11 w-11 shrink-0 rounded-xl"
+            aria-label="Send message"
           >
             <Send className="h-4 w-4" />
           </Button>

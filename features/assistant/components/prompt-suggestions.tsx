@@ -1,5 +1,4 @@
 import { Sparkles } from "lucide-react";
-import { Button } from "@/components/ui/button";
 import type { SuggestedPrompt } from "@/types";
 
 interface PromptSuggestionsProps {

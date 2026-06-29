@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { EmptyState } from "@/components/shared/empty-state";
 import { Plug, Search } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent } from "@/components/ui/card";
@@ -55,8 +56,15 @@ export function IntegrationsModule() {
       </Card>
 
       <div className="relative max-w-sm">
-        <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+        <label htmlFor="integration-search" className="sr-only">
+          Search integrations
+        </label>
+        <Search
+          className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground"
+          aria-hidden="true"
+        />
         <Input
+          id="integration-search"
           placeholder="Search integrations..."
           className="pl-9"
           value={search}
@@ -64,15 +72,23 @@ export function IntegrationsModule() {
         />
       </div>
 
-      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-        {filtered.map((integration) => (
-          <IntegrationCard
-            key={integration.id}
-            integration={integration}
-            onConnect={handleConnect}
-          />
-        ))}
-      </div>
+      {filtered.length === 0 ? (
+        <EmptyState
+          icon={Search}
+          title="No integrations found"
+          description="Try a different search term or browse all available integrations."
+        />
+      ) : (
+        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          {filtered.map((integration) => (
+            <IntegrationCard
+              key={integration.id}
+              integration={integration}
+              onConnect={handleConnect}
+            />
+          ))}
+        </div>
+      )}
     </div>
   );
 }

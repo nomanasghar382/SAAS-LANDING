@@ -15,6 +15,9 @@ export const ROUTES = {
   automation: "/dashboard/automation",
   integrations: "/dashboard/integrations",
   settings: "/dashboard/settings",
+  settingsProfile: "/dashboard/settings/profile",
+  settingsTeam: "/dashboard/settings/team",
+  settingsBilling: "/dashboard/settings/billing",
 } as const;
 
 export type RouteKey = keyof typeof ROUTES;

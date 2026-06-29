@@ -7,6 +7,8 @@ import { Button } from "@/components/ui/button";
 import { CampaignAnalytics } from "@/features/campaigns/components/campaign-analytics";
 import { campaignMetrics, mockCampaigns } from "@/constants/mock-data";
 import { ROUTES } from "@/constants/routes";
+import { campaignStatusVariants } from "@/constants/status-variants";
+import { getConversionRate } from "@/utils/crm";
 import { formatCurrency, formatDate } from "@/utils/format";
 
 interface CampaignDetailPageProps {
@@ -29,10 +31,7 @@ export default async function CampaignDetailPage({
 
   if (!campaign) notFound();
 
-  const conversionRate =
-    campaign.leads > 0
-      ? ((campaign.conversions / campaign.leads) * 100).toFixed(1)
-      : "0";
+  const conversionRate = getConversionRate(campaign.leads, campaign.conversions);
 
   return (
     <DashboardLayout
@@ -47,7 +46,9 @@ export default async function CampaignDetailPage({
       </Button>
 
       <div className="mb-6 flex flex-wrap items-center gap-3">
-        <Badge variant="success">{campaign.status}</Badge>
+        <Badge variant={campaignStatusVariants[campaign.status]}>
+          {campaign.status}
+        </Badge>
         <span className="text-sm text-muted-foreground">
           Started {formatDate(campaign.startDate)}
         </span>

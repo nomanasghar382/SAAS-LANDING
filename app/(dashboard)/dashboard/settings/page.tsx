@@ -12,19 +12,19 @@ const settingsSections = [
   {
     title: "Profile",
     description: "Manage your personal information and preferences",
-    href: `${ROUTES.settings}/profile`,
+    href: ROUTES.settingsProfile,
     icon: User,
   },
   {
     title: "Team",
     description: "Invite team members and manage roles",
-    href: `${ROUTES.settings}/team`,
+    href: ROUTES.settingsTeam,
     icon: Users,
   },
   {
     title: "Billing",
     description: "Manage subscription, invoices, and payment methods",
-    href: `${ROUTES.settings}/billing`,
+    href: ROUTES.settingsBilling,
     icon: CreditCard,
   },
 ];

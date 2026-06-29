@@ -6,7 +6,11 @@ import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { useAssistantStore } from "@/store/assistant-store";
 
-export function ChatHistorySidebar() {
+interface ChatHistorySidebarProps {
+  onNavigate?: () => void;
+}
+
+export function ChatHistorySidebar({ onNavigate }: ChatHistorySidebarProps) {
   const {
     conversations,
     activeConversationId,
@@ -45,7 +49,10 @@ export function ChatHistorySidebar() {
             >
               <button
                 type="button"
-                onClick={() => setActiveConversation(conv.id)}
+                onClick={() => {
+                  setActiveConversation(conv.id);
+                  onNavigate?.();
+                }}
                 className="flex-1 px-3 py-2.5 text-left"
               >
                 <p className="truncate text-sm font-medium">{conv.title}</p>
@@ -56,7 +63,8 @@ export function ChatHistorySidebar() {
               <Button
                 variant="ghost"
                 size="icon"
-                className="mr-1 h-7 w-7 shrink-0 opacity-0 ds-transition group-hover:opacity-100"
+                className="mr-1 h-7 w-7 shrink-0 opacity-0 ds-transition group-hover:opacity-100 focus-visible:opacity-100"
+                aria-label={`Delete conversation: ${conv.title}`}
                 onClick={(e) => {
                   e.stopPropagation();
                   deleteConversation(conv.id);

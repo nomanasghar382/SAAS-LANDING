@@ -1,16 +1,9 @@
-import { Sidebar } from "@/components/layout/sidebar";
+import { DashboardShell } from "@/components/layout/dashboard-shell";
 
 export default function DashboardGroupLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  return (
-    <div className="flex h-screen overflow-hidden">
-      <Sidebar />
-      <div className="flex flex-1 flex-col overflow-hidden">
-        {children}
-      </div>
-    </div>
-  );
+  return <DashboardShell>{children}</DashboardShell>;
 }

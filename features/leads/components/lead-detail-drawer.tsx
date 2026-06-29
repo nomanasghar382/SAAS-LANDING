@@ -18,20 +18,10 @@ import {
   SheetTitle,
 } from "@/components/ui/sheet";
 import { LeadScoreBadge } from "./lead-score-badge";
+import { leadStatusVariants } from "@/constants/status-variants";
 import { formatCurrency, formatDate } from "@/utils/format";
-import type { Lead, LeadStatus } from "@/types";
-
-const statusVariants: Record<
-  LeadStatus,
-  "default" | "secondary" | "success" | "warning" | "destructive" | "outline"
-> = {
-  new: "secondary",
-  contacted: "outline",
-  qualified: "default",
-  proposal: "warning",
-  won: "success",
-  lost: "destructive",
-};
+import { getLeadScoreLabel } from "@/utils/crm";
+import type { Lead } from "@/types";
 
 interface LeadDetailDrawerProps {
   lead: Lead | null;
@@ -55,12 +45,11 @@ export function LeadDetailDrawer({
               <SheetTitle>{lead.name}</SheetTitle>
               <SheetDescription>{lead.company}</SheetDescription>
             </div>
-            <Badge variant={statusVariants[lead.status]}>{lead.status}</Badge>
+            <Badge variant={leadStatusVariants[lead.status]}>{lead.status}</Badge>
           </div>
         </SheetHeader>
 
         <SheetBody className="space-y-6">
-          {/* Score */}
           <div className="rounded-lg border bg-muted/30 p-4">
             <p className="text-xs font-medium uppercase tracking-wider text-muted-foreground">
               Lead Score
@@ -68,41 +57,41 @@ export function LeadDetailDrawer({
             <div className="mt-2 flex items-center gap-3">
               <LeadScoreBadge score={lead.score} showBar />
               <span className="text-xs text-muted-foreground">
-                {lead.score >= 80
-                  ? "Hot lead"
-                  : lead.score >= 60
-                    ? "Warm lead"
-                    : "Cold lead"}
+                {getLeadScoreLabel(lead.score)}
               </span>
             </div>
           </div>
 
-          {/* Contact info */}
           <div className="space-y-3">
             <h4 className="text-sm font-semibold">Contact</h4>
             <div className="space-y-2.5">
               <div className="flex items-center gap-3 text-sm">
-                <Mail className="h-4 w-4 text-muted-foreground" />
-                <span>{lead.email}</span>
+                <Mail className="h-4 w-4 text-muted-foreground" aria-hidden="true" />
+                <a href={`mailto:${lead.email}`} className="hover:underline">
+                  {lead.email}
+                </a>
               </div>
               {lead.phone && (
                 <div className="flex items-center gap-3 text-sm">
-                  <Phone className="h-4 w-4 text-muted-foreground" />
-                  <span>{lead.phone}</span>
+                  <Phone className="h-4 w-4 text-muted-foreground" aria-hidden="true" />
+                  <a href={`tel:${lead.phone}`} className="hover:underline">
+                    {lead.phone}
+                  </a>
                 </div>
               )}
               <div className="flex items-center gap-3 text-sm">
-                <Building2 className="h-4 w-4 text-muted-foreground" />
+                <Building2 className="h-4 w-4 text-muted-foreground" aria-hidden="true" />
                 <span>{lead.company}</span>
               </div>
             </div>
           </div>
 
-          {/* Deal info */}
           <div className="grid grid-cols-2 gap-4">
             <div className="rounded-lg border p-3">
               <p className="text-xs text-muted-foreground">Deal Value</p>
-              <p className="mt-1 text-lg font-bold">{formatCurrency(lead.value)}</p>
+              <p className="mt-1 text-lg font-bold tabular-nums">
+                {formatCurrency(lead.value)}
+              </p>
             </div>
             <div className="rounded-lg border p-3">
               <p className="text-xs text-muted-foreground">Source</p>
@@ -112,24 +101,22 @@ export function LeadDetailDrawer({
             </div>
           </div>
 
-          {/* Timeline */}
           <div className="space-y-2">
             <h4 className="text-sm font-semibold">Timeline</h4>
             <div className="flex items-center gap-3 text-sm text-muted-foreground">
-              <Calendar className="h-4 w-4" />
+              <Calendar className="h-4 w-4" aria-hidden="true" />
               <span>Created {formatDate(lead.createdAt)}</span>
             </div>
             <div className="flex items-center gap-3 text-sm text-muted-foreground">
-              <Calendar className="h-4 w-4" />
+              <Calendar className="h-4 w-4" aria-hidden="true" />
               <span>Updated {formatDate(lead.updatedAt)}</span>
             </div>
           </div>
 
-          {/* Notes */}
           {lead.notes && (
             <div className="space-y-2">
               <h4 className="flex items-center gap-2 text-sm font-semibold">
-                <StickyNote className="h-4 w-4" />
+                <StickyNote className="h-4 w-4" aria-hidden="true" />
                 Notes
               </h4>
               <p className="rounded-lg bg-muted/30 p-3 text-sm text-muted-foreground leading-relaxed">

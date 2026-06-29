@@ -67,11 +67,16 @@ export function SocialProofSection() {
             >
               <Card className="h-full">
                 <CardContent className="pt-6">
-                  <div className="mb-4 flex gap-1">
+                  <div
+                    className="mb-4 flex gap-1"
+                    role="img"
+                    aria-label="5 out of 5 stars"
+                  >
                     {Array.from({ length: 5 }).map((_, i) => (
                       <Star
                         key={i}
                         className="h-4 w-4 fill-amber-400 text-amber-400"
+                        aria-hidden="true"
                       />
                     ))}
                   </div>

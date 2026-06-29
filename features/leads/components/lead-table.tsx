@@ -11,21 +11,10 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { LeadScoreBadge } from "./lead-score-badge";
+import { leadStatusVariants } from "@/constants/status-variants";
 import { cn } from "@/lib/utils";
 import { formatCurrency, formatDate } from "@/utils/format";
-import type { Lead, LeadSort, LeadSortField, LeadStatus } from "@/types";
-
-const statusVariants: Record<
-  LeadStatus,
-  "default" | "secondary" | "success" | "warning" | "destructive" | "outline"
-> = {
-  new: "secondary",
-  contacted: "outline",
-  qualified: "default",
-  proposal: "warning",
-  won: "success",
-  lost: "destructive",
-};
+import type { Lead, LeadSort, LeadSortField } from "@/types";
 
 interface LeadTableProps {
   leads: Lead[];
@@ -51,12 +40,12 @@ function SortIcon({
   sort: LeadSort;
 }) {
   if (sort.field !== field) {
-    return <ArrowUpDown className="ml-1 inline h-3.5 w-3.5 opacity-40" />;
+    return <ArrowUpDown className="ml-1 inline h-3.5 w-3.5 opacity-40" aria-hidden="true" />;
   }
   return sort.direction === "asc" ? (
-    <ArrowUp className="ml-1 inline h-3.5 w-3.5" />
+    <ArrowUp className="ml-1 inline h-3.5 w-3.5" aria-hidden="true" />
   ) : (
-    <ArrowDown className="ml-1 inline h-3.5 w-3.5" />
+    <ArrowDown className="ml-1 inline h-3.5 w-3.5" aria-hidden="true" />
   );
 }
 
@@ -67,30 +56,51 @@ export function LeadTable({
   onLeadSelect,
 }: LeadTableProps) {
   return (
-    <div className="rounded-lg border bg-card shadow-xs">
+    <div className="overflow-x-auto rounded-lg border bg-card shadow-xs">
       <Table responsive={false}>
         <TableHeader>
           <TableRow>
             {sortableColumns.map((col) => (
               <TableHead
                 key={col.field}
+                scope="col"
+                aria-sort={
+                  sort.field === col.field
+                    ? sort.direction === "asc"
+                      ? "ascending"
+                      : "descending"
+                    : "none"
+                }
                 className={cn(
                   "cursor-pointer select-none ds-transition hover:text-foreground",
                   (col.field === "value" || col.field === "score") && "text-right"
                 )}
                 onClick={() => onSortChange(col.field)}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter" || e.key === " ") {
+                    e.preventDefault();
+                    onSortChange(col.field);
+                  }
+                }}
+                tabIndex={0}
+                role="columnheader"
               >
                 {col.label}
                 <SortIcon field={col.field} sort={sort} />
               </TableHead>
             ))}
-            <TableHead className="hidden lg:table-cell">Source</TableHead>
+            <TableHead scope="col" className="hidden lg:table-cell">
+              Source
+            </TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
           {leads.length === 0 ? (
             <TableRow>
-              <TableCell colSpan={7} className="h-32 text-center text-muted-foreground">
+              <TableCell
+                colSpan={7}
+                className="h-32 text-center text-muted-foreground"
+              >
                 No leads found matching your filters.
               </TableCell>
             </TableRow>
@@ -100,6 +110,12 @@ export function LeadTable({
                 key={lead.id}
                 className="cursor-pointer"
                 onClick={() => onLeadSelect(lead)}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") onLeadSelect(lead);
+                }}
+                tabIndex={0}
+                role="button"
+                aria-label={`View details for ${lead.name}`}
               >
                 <TableCell>
                   <p className="font-medium">{lead.name}</p>
@@ -107,7 +123,7 @@ export function LeadTable({
                 </TableCell>
                 <TableCell>{lead.company}</TableCell>
                 <TableCell>
-                  <Badge variant={statusVariants[lead.status]}>
+                  <Badge variant={leadStatusVariants[lead.status]}>
                     {lead.status}
                   </Badge>
                 </TableCell>

@@ -1,4 +1,5 @@
 import { Suspense } from "react";
+import { PageLoading } from "@/components/shared/page-loading";
 import { LoginForm } from "@/features/auth/components/login-form";
 
 export const metadata = {
@@ -14,7 +15,7 @@ export default function LoginPage() {
           Sign in to your account to continue
         </p>
       </div>
-      <Suspense>
+      <Suspense fallback={<PageLoading label="Loading sign in" />}>
         <LoginForm />
       </Suspense>
     </div>
