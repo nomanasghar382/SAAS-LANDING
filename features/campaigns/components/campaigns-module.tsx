@@ -10,10 +10,12 @@ import { CampaignCard } from "./campaign-card";
 import { CampaignStats } from "./campaign-stats";
 import { campaignMetrics } from "@/constants/mock-data";
 import { campaignsService } from "@/services/campaigns.service";
+import { useAppStore } from "@/store/app-store";
 import { toast } from "@/lib/toast";
 import type { Campaign } from "@/types";
 
 export function CampaignsModule() {
+  const { setCreateCampaignOpen } = useAppStore();
   const [campaigns, setCampaigns] = useState<Campaign[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -27,8 +29,16 @@ export function CampaignsModule() {
       .finally(() => setIsLoading(false));
   }, []);
 
+  useEffect(() => {
+    const handler = () => {
+      campaignsService.getAll().then((res) => setCampaigns(res.data));
+    };
+    window.addEventListener("campaigns:refresh", handler);
+    return () => window.removeEventListener("campaigns:refresh", handler);
+  }, []);
+
   const handleNewCampaign = () => {
-    toast.info("New campaign", "Campaign builder will open in the next release.");
+    setCreateCampaignOpen(true);
   };
 
   if (isLoading) {

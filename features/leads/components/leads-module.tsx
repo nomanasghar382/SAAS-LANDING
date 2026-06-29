@@ -6,11 +6,12 @@ import { DollarSign, Download, Flame, Plus, Users } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { EmptyState } from "@/components/shared/empty-state";
-import { PageLoading } from "@/components/shared/page-loading";
+import { LeadsTableSkeleton } from "./leads-table-skeleton";
 import { LeadDetailDrawer } from "./lead-detail-drawer";
 import { LeadFilters } from "./lead-filters";
 import { LeadTable } from "./lead-table";
 import { leadsService } from "@/services/leads.service";
+import { useAppStore } from "@/store/app-store";
 import { toast } from "@/lib/toast";
 import type { Lead, LeadFilters as LeadFiltersType, LeadSort } from "@/types";
 
@@ -33,6 +34,7 @@ function sortLeads(leads: Lead[], sort: LeadSort): Lead[] {
 
 export function LeadsModule() {
   const searchParams = useSearchParams();
+  const { setAddLeadOpen } = useAppStore();
   const [leads, setLeads] = useState<Lead[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [filters, setFilters] = useState<LeadFiltersType>({
@@ -68,6 +70,12 @@ export function LeadsModule() {
     return () => clearTimeout(timeout);
   }, [fetchLeads, filters.search]);
 
+  useEffect(() => {
+    const handler = () => fetchLeads();
+    window.addEventListener("leads:refresh", handler);
+    return () => window.removeEventListener("leads:refresh", handler);
+  }, [fetchLeads]);
+
   const filteredLeads = useMemo(
     () => sortLeads(leads, sort),
     [leads, sort]
@@ -96,15 +104,36 @@ export function LeadsModule() {
   };
 
   const handleExport = () => {
-    toast.success("Export started", "Your leads CSV will download shortly.");
+    const headers = ["Name", "Email", "Company", "Status", "Value", "Score"];
+    const rows = filteredLeads.map((l) =>
+      [l.name, l.email, l.company, l.status, l.value, l.score].join(",")
+    );
+    const csv = [headers.join(","), ...rows].join("\n");
+    const blob = new Blob([csv], { type: "text/csv" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `leads-${new Date().toISOString().slice(0, 10)}.csv`;
+    a.click();
+    URL.revokeObjectURL(url);
+    toast.success("Export complete", "Your CSV has been downloaded.");
   };
 
   const handleAddLead = () => {
-    toast.info("Add lead", "Lead creation form coming in the next release.");
+    setAddLeadOpen(true);
   };
 
   if (isLoading && leads.length === 0) {
-    return <PageLoading label="Loading leads" className="min-h-[50vh]" />;
+    return (
+      <div className="space-y-6">
+        <div className="grid gap-4 sm:grid-cols-3">
+          {Array.from({ length: 3 }).map((_, i) => (
+            <div key={i} className="h-20 animate-pulse rounded-lg bg-muted/60" />
+          ))}
+        </div>
+        <LeadsTableSkeleton />
+      </div>
+    );
   }
 
   return (

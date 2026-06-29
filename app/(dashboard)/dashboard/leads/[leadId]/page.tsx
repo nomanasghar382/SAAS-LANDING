@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ArrowLeft, Building2, Mail } from "lucide-react";
+import { Breadcrumbs } from "@/components/layout/breadcrumbs";
 import { DashboardLayout } from "@/components/layout/dashboard-layout";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -31,6 +32,12 @@ export default async function LeadDetailPage({ params }: LeadDetailPageProps) {
 
   return (
     <DashboardLayout title={lead.name} description={`Lead at ${lead.company}`}>
+      <Breadcrumbs
+        items={[
+          { label: "Leads", href: ROUTES.leads },
+          { label: lead.name },
+        ]}
+      />
       <Button variant="ghost" size="sm" asChild className="mb-6 -ml-2">
         <Link href={ROUTES.leads}>
           <ArrowLeft className="h-4 w-4" />

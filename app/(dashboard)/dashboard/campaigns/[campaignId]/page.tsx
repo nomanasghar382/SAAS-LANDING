@@ -1,3 +1,4 @@
+import { Breadcrumbs } from "@/components/layout/breadcrumbs";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ArrowLeft } from "lucide-react";
@@ -40,6 +41,12 @@ export default async function CampaignDetailPage({
       title={campaign.name}
       description={campaign.description}
     >
+      <Breadcrumbs
+        items={[
+          { label: "Campaigns", href: ROUTES.campaigns },
+          { label: campaign.name },
+        ]}
+      />
       <Button variant="ghost" size="sm" asChild className="mb-6 -ml-2">
         <Link href={ROUTES.campaigns}>
           <ArrowLeft className="h-4 w-4" />

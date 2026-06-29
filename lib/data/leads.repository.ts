@@ -1,5 +1,6 @@
-import { mockLeads } from "@/constants/mock-data";
+import { getLeadsStore } from "@/lib/data/store";
 import type { Lead, PaginatedResponse } from "@/types";
+import type { LeadSource, LeadStatus } from "@/types";
 
 export interface LeadQueryParams {
   status?: string | null;
@@ -7,10 +8,21 @@ export interface LeadQueryParams {
   search?: string | null;
 }
 
-export function getLeads(params: LeadQueryParams = {}): PaginatedResponse<Lead> {
-  const { status, source, search } = params;
+export interface CreateLeadInput {
+  name: string;
+  email: string;
+  company: string;
+  status?: LeadStatus;
+  source?: LeadSource;
+  value?: number;
+  score?: number;
+  phone?: string;
+  notes?: string;
+}
 
-  let filtered = [...mockLeads];
+function filterLeads(leads: Lead[], params: LeadQueryParams): Lead[] {
+  const { status, source, search } = params;
+  let filtered = [...leads];
 
   if (status && status !== "all") {
     filtered = filtered.filter((lead) => lead.status === status);
@@ -28,6 +40,12 @@ export function getLeads(params: LeadQueryParams = {}): PaginatedResponse<Lead> 
     );
   }
 
+  return filtered;
+}
+
+export function getLeads(params: LeadQueryParams = {}): PaginatedResponse<Lead> {
+  const filtered = filterLeads(getLeadsStore(), params);
+
   return {
     data: filtered,
     total: filtered.length,
@@ -38,13 +56,48 @@ export function getLeads(params: LeadQueryParams = {}): PaginatedResponse<Lead> 
 }
 
 export function getLeadById(id: string): Lead | undefined {
-  return mockLeads.find((lead) => lead.id === id);
+  return getLeadsStore().find((lead) => lead.id === id);
+}
+
+export function createLead(input: CreateLeadInput): Lead {
+  const now = new Date().toISOString();
+  const lead: Lead = {
+    id: `lead-${crypto.randomUUID().slice(0, 8)}`,
+    name: input.name,
+    email: input.email,
+    company: input.company,
+    status: input.status ?? "new",
+    source: input.source ?? "website",
+    value: input.value ?? 0,
+    score: input.score ?? 50,
+    phone: input.phone,
+    notes: input.notes,
+    createdAt: now,
+    updatedAt: now,
+  };
+
+  getLeadsStore().unshift(lead);
+  return lead;
+}
+
+export function updateLead(id: string, updates: Partial<Lead>): Lead | null {
+  const store = getLeadsStore();
+  const index = store.findIndex((l) => l.id === id);
+  if (index === -1) return null;
+
+  store[index] = {
+    ...store[index],
+    ...updates,
+    updatedAt: new Date().toISOString(),
+  };
+  return store[index];
 }
 
 export function getLeadStats() {
+  const leads = getLeadsStore();
   return {
-    total: mockLeads.length,
-    hot: mockLeads.filter((l) => l.score >= 80).length,
-    pipeline: mockLeads.reduce((sum, l) => sum + l.value, 0),
+    total: leads.length,
+    hot: leads.filter((l) => l.score >= 80).length,
+    pipeline: leads.reduce((sum, l) => sum + l.value, 0),
   };
 }

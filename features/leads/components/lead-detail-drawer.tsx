@@ -17,6 +17,7 @@ import {
   SheetHeader,
   SheetTitle,
 } from "@/components/ui/sheet";
+import { toast } from "@/lib/toast";
 import { LeadScoreBadge } from "./lead-score-badge";
 import { leadStatusVariants } from "@/constants/status-variants";
 import { formatCurrency, formatDate } from "@/utils/format";
@@ -126,8 +127,18 @@ export function LeadDetailDrawer({
           )}
 
           <div className="flex gap-2 pt-2">
-            <Button className="flex-1">Send email</Button>
-            <Button variant="outline" className="flex-1">
+            <Button className="flex-1" asChild>
+              <a href={`mailto:${lead.email}?subject=Following up — ${lead.company}`}>
+                Send email
+              </a>
+            </Button>
+            <Button
+              variant="outline"
+              className="flex-1"
+              onClick={() =>
+                toast.success("Call scheduled", `Calendar invite sent to ${lead.name}.`)
+              }
+            >
               Schedule call
             </Button>
           </div>

@@ -1,7 +1,9 @@
 import type { Metadata } from "next";
 import { CtaSection } from "@/features/marketing/components/cta-section";
+import { FaqSection } from "@/features/marketing/components/faq-section";
 import { FeaturesSection } from "@/features/marketing/components/features-section";
 import { HeroSection } from "@/features/marketing/components/hero-section";
+import { LogoCloud } from "@/features/marketing/components/logo-cloud";
 import { SocialProofSection } from "@/features/marketing/components/social-proof-section";
 
 export const metadata: Metadata = {
@@ -20,8 +22,10 @@ export default function HomePage() {
   return (
     <>
       <HeroSection />
+      <LogoCloud />
       <FeaturesSection />
       <SocialProofSection />
+      <FaqSection />
       <CtaSection />
     </>
   );

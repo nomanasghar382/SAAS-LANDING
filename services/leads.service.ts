@@ -8,4 +8,20 @@ export const leadsService = {
     apiClient<PaginatedResponse<Lead>>(BASE, { params }),
 
   getById: (id: string) => apiClient<Lead>(`${BASE}/${id}`),
+
+  create: (data: {
+    name: string;
+    email: string;
+    company: string;
+    status?: string;
+    source?: string;
+    value?: number;
+    score?: number;
+    phone?: string;
+    notes?: string;
+  }) =>
+    apiClient<Lead>(BASE, {
+      method: "POST",
+      body: JSON.stringify(data),
+    }),
 };

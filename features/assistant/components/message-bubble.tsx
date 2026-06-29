@@ -9,6 +9,25 @@ interface MessageBubbleProps {
   isStreaming?: boolean;
 }
 
+function renderMarkdown(text: string) {
+  const parts = text.split(/(\*\*[^*]+\*\*)/g);
+  return parts.map((part, i) => {
+    if (part.startsWith("**") && part.endsWith("**")) {
+      return (
+        <strong key={i} className="font-semibold">
+          {part.slice(2, -2)}
+        </strong>
+      );
+    }
+    return part.split("\n").map((line, j, arr) => (
+      <span key={`${i}-${j}`}>
+        {line}
+        {j < arr.length - 1 && <br />}
+      </span>
+    ));
+  });
+}
+
 export function MessageBubble({ message, isStreaming }: MessageBubbleProps) {
   const isUser = message.role === "user";
 
@@ -42,7 +61,9 @@ export function MessageBubble({ message, isStreaming }: MessageBubbleProps) {
         {isStreaming && !message.content ? (
           <TypingIndicator />
         ) : (
-          <p className="whitespace-pre-wrap">{message.content}</p>
+          <div className="whitespace-pre-wrap">
+            {isUser ? message.content : renderMarkdown(message.content)}
+          </div>
         )}
       </div>
     </div>

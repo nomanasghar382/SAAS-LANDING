@@ -1,15 +1,11 @@
 "use client";
 
-import { useRouter } from "next/navigation";
-import { Bell, Search } from "lucide-react";
-import { useState } from "react";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { ThemeToggle } from "@/components/shared/theme-toggle";
+import { Search } from "lucide-react";
+import { NotificationsPopover } from "@/components/layout/notifications-popover";
 import { UserMenu } from "@/components/layout/user-menu";
-import { ROUTES } from "@/constants/routes";
-import { toast } from "@/lib/toast";
+import { ThemeToggle } from "@/components/shared/theme-toggle";
+import { Button } from "@/components/ui/button";
+import { useAppStore } from "@/store/app-store";
 
 interface DashboardLayoutProps {
   children: React.ReactNode;
@@ -22,41 +18,29 @@ export function DashboardLayout({
   title,
   description,
 }: DashboardLayoutProps) {
-  const router = useRouter();
-  const [search, setSearch] = useState("");
-
-  const handleSearch = () => {
-    const query = search.trim();
-    if (!query) return;
-    router.push(`${ROUTES.leads}?search=${encodeURIComponent(query)}`);
-  };
+  const { setCommandOpen } = useAppStore();
 
   return (
     <div className="flex min-h-0 flex-1 flex-col overflow-hidden">
       <header className="flex h-14 shrink-0 items-center justify-between border-b bg-background/95 px-4 backdrop-blur-sm sm:h-16 sm:px-6">
         <div className="flex flex-1 items-center gap-4">
-          <div className="relative hidden max-w-md flex-1 lg:block">
-            <Label htmlFor="dashboard-search" className="sr-only">
-              Search leads and campaigns
-            </Label>
+          <button
+            type="button"
+            onClick={() => setCommandOpen(true)}
+            className="relative hidden max-w-md flex-1 items-center lg:flex"
+            aria-label="Open command palette"
+          >
             <Search
-              className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground"
+              className="absolute left-3 h-4 w-4 text-muted-foreground"
               aria-hidden="true"
             />
-            <Input
-              id="dashboard-search"
-              placeholder="Search leads, campaigns..."
-              className="pl-9"
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-              onKeyDown={(e) => {
-                if (e.key === "Enter") {
-                  e.preventDefault();
-                  handleSearch();
-                }
-              }}
-            />
-          </div>
+            <span className="flex h-9 w-full items-center rounded-md border border-input bg-muted/30 pl-9 pr-16 text-sm text-muted-foreground ds-transition hover:bg-muted/50">
+              Search or jump to...
+            </span>
+            <kbd className="pointer-events-none absolute right-2 hidden h-6 select-none items-center gap-1 rounded border bg-background px-1.5 font-mono text-[10px] font-medium text-muted-foreground sm:flex">
+              <span className="text-xs">⌘</span>K
+            </kbd>
+          </button>
           {title && (
             <h1 className="text-base font-semibold tracking-tight lg:hidden">
               {title}
@@ -65,18 +49,17 @@ export function DashboardLayout({
         </div>
 
         <div className="flex items-center gap-1 sm:gap-2">
-          <ThemeToggle />
           <Button
             variant="ghost"
             size="icon"
-            className="relative"
-            aria-label="Notifications"
-            onClick={() =>
-              toast.info("Notifications", "You're all caught up for now.")
-            }
+            className="lg:hidden"
+            onClick={() => setCommandOpen(true)}
+            aria-label="Open command palette"
           >
-            <Bell className="h-5 w-5" aria-hidden="true" />
+            <Search className="h-5 w-5" />
           </Button>
+          <ThemeToggle />
+          <NotificationsPopover />
           <UserMenu />
         </div>
       </header>
