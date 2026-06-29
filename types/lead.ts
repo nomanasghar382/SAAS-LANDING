@@ -2,6 +2,16 @@ export type LeadStatus = "new" | "contacted" | "qualified" | "proposal" | "won" 
 
 export type LeadSource = "website" | "referral" | "linkedin" | "cold_outreach" | "event";
 
+export type LeadSortField =
+  | "name"
+  | "company"
+  | "status"
+  | "value"
+  | "score"
+  | "updatedAt";
+
+export type LeadSortDirection = "asc" | "desc";
+
 export interface Lead {
   id: string;
   name: string;
@@ -11,6 +21,8 @@ export interface Lead {
   source: LeadSource;
   value: number;
   score: number;
+  phone?: string;
+  notes?: string;
   createdAt: string;
   updatedAt: string;
 }
@@ -19,4 +31,9 @@ export interface LeadFilters {
   search: string;
   status: LeadStatus | "all";
   source: LeadSource | "all";
+}
+
+export interface LeadSort {
+  field: LeadSortField;
+  direction: LeadSortDirection;
 }

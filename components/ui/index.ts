@@ -66,3 +66,18 @@ export {
 } from "./table";
 
 export { Tabs, TabsList, TabsTrigger, TabsContent } from "./tabs";
+
+export {
+  Sheet,
+  SheetPortal,
+  SheetOverlay,
+  SheetTrigger,
+  SheetClose,
+  SheetContent,
+  SheetHeader,
+  SheetTitle,
+  SheetDescription,
+  SheetBody,
+} from "./sheet";
+
+export { Progress } from "./progress";

@@ -4,3 +4,4 @@ export * from "./lead";
 export * from "./campaign";
 export * from "./assistant";
 export * from "./dashboard";
+export * from "./automation";

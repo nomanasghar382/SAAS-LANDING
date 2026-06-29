@@ -2,11 +2,14 @@ import type {
   ActivityItem,
   Campaign,
   CampaignMetric,
+  ChatConversation,
   ChatMessage,
   DashboardStat,
+  Integration,
   Lead,
   RevenueDataPoint,
   SuggestedPrompt,
+  Workflow,
 } from "@/types";
 
 export const dashboardStats: DashboardStat[] = [
@@ -90,6 +93,8 @@ export const mockLeads: Lead[] = [
     source: "linkedin",
     value: 45000,
     score: 92,
+    phone: "+1 (555) 234-5678",
+    notes: "Interested in enterprise plan. Decision maker for engineering team.",
     createdAt: "2026-06-20T10:00:00Z",
     updatedAt: "2026-06-28T14:30:00Z",
   },
@@ -102,6 +107,8 @@ export const mockLeads: Lead[] = [
     source: "referral",
     value: 78000,
     score: 88,
+    phone: "+1 (555) 345-6789",
+    notes: "Proposal sent. Awaiting budget approval from CFO.",
     createdAt: "2026-06-15T08:00:00Z",
     updatedAt: "2026-06-27T16:00:00Z",
   },
@@ -114,6 +121,7 @@ export const mockLeads: Lead[] = [
     source: "website",
     value: 12000,
     score: 65,
+    phone: "+1 (555) 456-7890",
     createdAt: "2026-06-28T09:00:00Z",
     updatedAt: "2026-06-28T09:00:00Z",
   },
@@ -126,6 +134,8 @@ export const mockLeads: Lead[] = [
     source: "cold_outreach",
     value: 35000,
     score: 71,
+    phone: "+1 (555) 567-8901",
+    notes: "Responded to initial outreach. Schedule demo next week.",
     createdAt: "2026-06-22T11:00:00Z",
     updatedAt: "2026-06-26T10:00:00Z",
   },
@@ -138,8 +148,35 @@ export const mockLeads: Lead[] = [
     source: "event",
     value: 120000,
     score: 95,
+    phone: "+1 (555) 678-9012",
+    notes: "Closed at SaaStr annual conference. Annual contract signed.",
     createdAt: "2026-05-10T08:00:00Z",
     updatedAt: "2026-06-25T17:00:00Z",
+  },
+  {
+    id: "6",
+    name: "David Kim",
+    email: "david@nexgen.io",
+    company: "NexGen Systems",
+    status: "contacted",
+    source: "linkedin",
+    value: 52000,
+    score: 78,
+    createdAt: "2026-06-24T14:00:00Z",
+    updatedAt: "2026-06-27T09:00:00Z",
+  },
+  {
+    id: "7",
+    name: "Rachel Green",
+    email: "rachel@cloudbase.com",
+    company: "CloudBase",
+    status: "lost",
+    source: "referral",
+    value: 28000,
+    score: 42,
+    notes: "Went with competitor. Price was the main factor.",
+    createdAt: "2026-05-20T10:00:00Z",
+    updatedAt: "2026-06-20T11:00:00Z",
   },
 ];
 
@@ -152,6 +189,8 @@ export const mockCampaigns: Campaign[] = [
     leads: 342,
     conversions: 48,
     revenue: 285000,
+    openRate: 34.2,
+    emailsSent: 4200,
     startDate: "2026-04-01",
     endDate: "2026-06-30",
   },
@@ -163,6 +202,8 @@ export const mockCampaigns: Campaign[] = [
     leads: 156,
     conversions: 32,
     revenue: 96000,
+    openRate: 41.8,
+    emailsSent: 1850,
     startDate: "2026-05-15",
   },
   {
@@ -173,48 +214,183 @@ export const mockCampaigns: Campaign[] = [
     leads: 89,
     conversions: 12,
     revenue: 42000,
+    openRate: 28.5,
+    emailsSent: 920,
     startDate: "2026-03-01",
     endDate: "2026-05-31",
   },
 ];
 
 export const campaignMetrics: CampaignMetric[] = [
-  { date: "Jun 1", impressions: 12000, clicks: 840, conversions: 42, revenue: 21000 },
-  { date: "Jun 8", impressions: 14500, clicks: 1020, conversions: 51, revenue: 25500 },
-  { date: "Jun 15", impressions: 13200, clicks: 950, conversions: 48, revenue: 24000 },
-  { date: "Jun 22", impressions: 15800, clicks: 1180, conversions: 59, revenue: 29500 },
-  { date: "Jun 29", impressions: 16200, clicks: 1250, conversions: 62, revenue: 31000 },
+  { date: "Jun 1", impressions: 12000, clicks: 840, conversions: 42, revenue: 21000, openRate: 32.1 },
+  { date: "Jun 8", impressions: 14500, clicks: 1020, conversions: 51, revenue: 25500, openRate: 34.5 },
+  { date: "Jun 15", impressions: 13200, clicks: 950, conversions: 48, revenue: 24000, openRate: 33.8 },
+  { date: "Jun 22", impressions: 15800, clicks: 1180, conversions: 59, revenue: 29500, openRate: 36.2 },
+  { date: "Jun 29", impressions: 16200, clicks: 1250, conversions: 62, revenue: 31000, openRate: 38.4 },
 ];
 
 export const suggestedPrompts: SuggestedPrompt[] = [
+  { id: "1", label: "Analyze pipeline", prompt: "Analyze my current sales pipeline and identify bottlenecks" },
+  { id: "2", label: "Draft follow-up", prompt: "Draft a follow-up email for qualified leads from this week" },
+  { id: "3", label: "Campaign ideas", prompt: "Suggest campaign ideas to improve conversion rates" },
+  { id: "4", label: "Lead scoring", prompt: "Review lead scores and recommend priority actions" },
+];
+
+export const defaultAssistantMessage: ChatMessage = {
+  id: "welcome",
+  role: "assistant",
+  content:
+    "Hello! I'm your SellPilot AI assistant. I can help you analyze leads, draft outreach emails, optimize campaigns, and more. What would you like to work on today?",
+  timestamp: new Date().toISOString(),
+};
+
+export const mockConversations: ChatConversation[] = [
   {
-    id: "1",
-    label: "Analyze pipeline",
-    prompt: "Analyze my current sales pipeline and identify bottlenecks",
+    id: "conv-1",
+    title: "Pipeline analysis",
+    messages: [
+      defaultAssistantMessage,
+      {
+        id: "m1",
+        role: "user",
+        content: "Analyze my current sales pipeline",
+        timestamp: new Date(Date.now() - 86400000).toISOString(),
+      },
+      {
+        id: "m2",
+        role: "assistant",
+        content:
+          "Your pipeline has 1,284 active leads with $2.4M in potential value. The main bottleneck is at the 'contacted' stage — 34% of leads stall here for over 7 days. I recommend automating follow-up sequences for this stage.",
+        timestamp: new Date(Date.now() - 86300000).toISOString(),
+      },
+    ],
+    createdAt: new Date(Date.now() - 86400000).toISOString(),
+    updatedAt: new Date(Date.now() - 86300000).toISOString(),
   },
   {
-    id: "2",
-    label: "Draft follow-up",
-    prompt: "Draft a follow-up email for qualified leads from this week",
+    id: "conv-2",
+    title: "Follow-up email draft",
+    messages: [
+      defaultAssistantMessage,
+      {
+        id: "m3",
+        role: "user",
+        content: "Draft a follow-up for Sarah Chen at TechCorp",
+        timestamp: new Date(Date.now() - 172800000).toISOString(),
+      },
+      {
+        id: "m4",
+        role: "assistant",
+        content:
+          "Here's a follow-up email for Sarah:\n\nSubject: Quick follow-up on SellPilot demo\n\nHi Sarah,\n\nI wanted to follow up on our conversation about automating TechCorp's sales pipeline. Based on your team's size, I estimate you could save 15+ hours per week.\n\nWould Thursday at 2pm work for a quick call?",
+        timestamp: new Date(Date.now() - 172700000).toISOString(),
+      },
+    ],
+    createdAt: new Date(Date.now() - 172800000).toISOString(),
+    updatedAt: new Date(Date.now() - 172700000).toISOString(),
   },
   {
-    id: "3",
-    label: "Campaign ideas",
-    prompt: "Suggest campaign ideas to improve conversion rates",
-  },
-  {
-    id: "4",
-    label: "Lead scoring",
-    prompt: "Review lead scores and recommend priority actions",
+    id: "conv-3",
+    title: "Campaign optimization",
+    messages: [defaultAssistantMessage],
+    createdAt: new Date(Date.now() - 259200000).toISOString(),
+    updatedAt: new Date(Date.now() - 259200000).toISOString(),
   },
 ];
 
-export const initialMessages: ChatMessage[] = [
+export const mockIntegrations: Integration[] = [
   {
-    id: "1",
-    role: "assistant",
-    content:
-      "Hello! I'm your SellPilot AI assistant. I can help you analyze leads, draft outreach emails, optimize campaigns, and more. What would you like to work on today?",
-    timestamp: new Date().toISOString(),
+    id: "shopify",
+    name: "Shopify",
+    description: "Sync orders, customers, and product data from your Shopify store",
+    category: "E-commerce",
+    status: "connected",
+    icon: "shopify",
+    brandColor: "#96BF48",
+    lastSync: new Date(Date.now() - 3600000).toISOString(),
   },
+  {
+    id: "stripe",
+    name: "Stripe",
+    description: "Track payments, subscriptions, and revenue in real-time",
+    category: "Payments",
+    status: "connected",
+    icon: "stripe",
+    brandColor: "#635BFF",
+    lastSync: new Date(Date.now() - 1800000).toISOString(),
+  },
+  {
+    id: "slack",
+    name: "Slack",
+    description: "Get deal alerts and team notifications in Slack channels",
+    category: "Communication",
+    status: "disconnected",
+    icon: "slack",
+    brandColor: "#4A154B",
+  },
+  {
+    id: "google-analytics",
+    name: "Google Analytics",
+    description: "Import website traffic and conversion data for lead scoring",
+    category: "Analytics",
+    status: "connected",
+    icon: "google-analytics",
+    brandColor: "#E37400",
+    lastSync: new Date(Date.now() - 7200000).toISOString(),
+  },
+  {
+    id: "hubspot",
+    name: "HubSpot",
+    description: "Bi-directional sync with HubSpot CRM contacts and deals",
+    category: "CRM",
+    status: "disconnected",
+    icon: "hubspot",
+    brandColor: "#FF7A59",
+  },
+];
+
+export const defaultWorkflow: Workflow = {
+  id: "wf-1",
+  name: "Lead to Conversion Pipeline",
+  description: "Automated flow from new lead capture to conversion",
+  status: "active",
+  runsCount: 1247,
+  successRate: 24.8,
+  nodes: [
+    {
+      id: "n1",
+      type: "trigger",
+      label: "Lead",
+      description: "New lead captured from any source",
+      status: "completed",
+    },
+    {
+      id: "n2",
+      type: "ai_qualification",
+      label: "AI Qualification",
+      description: "Score and qualify lead with AI",
+      status: "active",
+    },
+    {
+      id: "n3",
+      type: "email",
+      label: "Email",
+      description: "Send personalized outreach sequence",
+      status: "idle",
+    },
+    {
+      id: "n4",
+      type: "conversion",
+      label: "Conversion",
+      description: "Track deal close and update CRM",
+      status: "idle",
+    },
+  ],
+};
+
+export const aiResponses = [
+  "Based on your pipeline data, I see 3 high-priority leads that need follow-up this week. Sarah Chen (score: 92) and Michael Torres (score: 88) are your top opportunities.",
+  "I've drafted an outreach sequence for your Q2 Enterprise campaign. The recommended approach is a 3-email sequence over 10 days with personalized subject lines.",
+  "Your conversion rate dropped 2.1% this month. The main factor is slower response times at the 'contacted' stage. Enabling automation could recover 15-20% of stalled leads.",
+  "Looking at your lead sources, LinkedIn generates the highest quality leads (avg score: 82) while cold outreach has the lowest (avg score: 58). I recommend reallocating budget accordingly.",
 ];

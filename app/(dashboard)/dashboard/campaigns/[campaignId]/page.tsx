@@ -53,10 +53,11 @@ export default async function CampaignDetailPage({
         </span>
       </div>
 
-      <div className="mb-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+      <div className="mb-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-5">
         {[
           { label: "Leads", value: campaign.leads.toString() },
           { label: "Conversions", value: campaign.conversions.toString() },
+          { label: "Open Rate", value: `${campaign.openRate}%` },
           { label: "Conv. Rate", value: `${conversionRate}%` },
           { label: "Revenue", value: formatCurrency(campaign.revenue) },
         ].map((stat) => (
@@ -70,7 +71,7 @@ export default async function CampaignDetailPage({
         ))}
       </div>
 
-      <CampaignAnalytics data={campaignMetrics} title="Campaign Performance" />
+      <CampaignAnalytics data={campaignMetrics} />
     </DashboardLayout>
   );
 }

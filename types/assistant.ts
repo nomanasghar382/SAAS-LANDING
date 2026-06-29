@@ -12,3 +12,11 @@ export interface SuggestedPrompt {
   label: string;
   prompt: string;
 }
+
+export interface ChatConversation {
+  id: string;
+  title: string;
+  messages: ChatMessage[];
+  createdAt: string;
+  updatedAt: string;
+}

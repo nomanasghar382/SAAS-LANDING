@@ -44,7 +44,7 @@ export function LeadFilters({ filters, onFiltersChange }: LeadFiltersProps) {
       </div>
 
       <select
-        className="h-10 rounded-lg border border-input bg-background px-3 text-sm"
+        className="h-9 rounded-md border border-input bg-background px-3 text-sm shadow-xs ds-transition hover:border-border/80 focus:outline-none focus:ring-2 focus:ring-ring/30"
         value={filters.status}
         onChange={(e) =>
           onFiltersChange({
@@ -61,7 +61,7 @@ export function LeadFilters({ filters, onFiltersChange }: LeadFiltersProps) {
       </select>
 
       <select
-        className="h-10 rounded-lg border border-input bg-background px-3 text-sm"
+        className="h-9 rounded-md border border-input bg-background px-3 text-sm shadow-xs ds-transition hover:border-border/80 focus:outline-none focus:ring-2 focus:ring-ring/30"
         value={filters.source}
         onChange={(e) =>
           onFiltersChange({

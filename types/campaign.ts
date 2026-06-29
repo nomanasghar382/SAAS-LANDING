@@ -8,6 +8,8 @@ export interface Campaign {
   leads: number;
   conversions: number;
   revenue: number;
+  openRate: number;
+  emailsSent: number;
   startDate: string;
   endDate?: string;
 }
@@ -18,4 +20,5 @@ export interface CampaignMetric {
   clicks: number;
   conversions: number;
   revenue: number;
+  openRate: number;
 }
