@@ -6,19 +6,18 @@ import { motion } from "framer-motion";
 import { ArrowRight, Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ROUTES } from "@/constants/routes";
+import { HeroFallback } from "./hero/hero-fallback";
+import { usePrefersReducedMotion } from "@/hooks/use-prefers-reduced-motion";
 
 const HeroVisual = dynamic(
   () =>
     import("./hero/hero-visual").then((mod) => mod.HeroVisual),
-  { ssr: false }
+  { ssr: false, loading: () => <HeroFallback /> }
 );
 
-const fadeUp = {
-  initial: { opacity: 0, y: 24 },
-  animate: { opacity: 1, y: 0 },
-};
-
 export function HeroSection() {
+  const prefersReducedMotion = usePrefersReducedMotion();
+
   return (
     <section className="relative min-h-[90vh] overflow-hidden">
       {/* Background layers */}
@@ -40,8 +39,13 @@ export function HeroSection() {
         <div className="grid items-center gap-12 lg:grid-cols-2 lg:gap-8">
           {/* Copy */}
           <motion.div
-            {...fadeUp}
-            transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+            initial={prefersReducedMotion ? false : { opacity: 0, y: 24 }}
+            animate={prefersReducedMotion ? undefined : { opacity: 1, y: 0 }}
+            transition={
+              prefersReducedMotion
+                ? undefined
+                : { duration: 0.6, ease: [0.22, 1, 0.36, 1] as const }
+            }
             className="text-center lg:text-left"
           >
             <motion.div

@@ -27,6 +27,7 @@ export function EmptyState({
         "flex flex-col items-center justify-center rounded-lg border border-dashed bg-muted/20 px-6 py-16 text-center",
         className
       )}
+      role="status"
     >
       <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-primary/10 text-primary">
         <Icon className="h-6 w-6" aria-hidden="true" />

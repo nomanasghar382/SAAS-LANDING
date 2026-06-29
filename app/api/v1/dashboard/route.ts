@@ -1,14 +1,6 @@
 import { NextResponse } from "next/server";
-import {
-  activityFeed,
-  dashboardStats,
-  revenueData,
-} from "@/constants/mock-data";
+import { getDashboardOverview } from "@/lib/data/dashboard.repository";
 
 export async function GET() {
-  return NextResponse.json({
-    stats: dashboardStats,
-    revenue: revenueData,
-    activity: activityFeed,
-  });
+  return NextResponse.json(getDashboardOverview());
 }

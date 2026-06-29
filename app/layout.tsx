@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import { AuthProvider } from "@/components/providers/session-provider";
 import { ThemeProvider } from "@/components/providers/theme-provider";
+import { ToastProvider } from "@/components/providers/toast-provider";
 import { env } from "@/lib/env";
 import "./globals.css";
 
@@ -43,11 +44,13 @@ export const metadata: Metadata = {
     siteName: appName,
     title: appName,
     description: appDescription,
+    images: [{ url: "/opengraph-image", width: 1200, height: 630, alt: appName }],
   },
   twitter: {
     card: "summary_large_image",
     title: appName,
     description: appDescription,
+    images: ["/opengraph-image"],
   },
   robots: {
     index: true,
@@ -68,7 +71,10 @@ export default function RootLayout({
     >
       <body className="min-h-full flex flex-col">
         <AuthProvider>
-          <ThemeProvider>{children}</ThemeProvider>
+          <ThemeProvider>
+            {children}
+            <ToastProvider />
+          </ThemeProvider>
         </AuthProvider>
       </body>
     </html>

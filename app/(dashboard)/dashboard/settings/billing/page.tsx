@@ -1,11 +1,13 @@
 import { DashboardLayout } from "@/components/layout/dashboard-layout";
+import { UpgradePlanButton, UpdatePaymentButton } from "@/features/settings/components/billing-actions";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
+import { dashboardMetadata } from "@/lib/metadata";
 
-export const metadata = {
-  title: "Billing Settings",
-};
+export const metadata = dashboardMetadata(
+  "Billing Settings",
+  "Manage your subscription and payments"
+);
 
 export default function BillingSettingsPage() {
   return (
@@ -21,9 +23,9 @@ export default function BillingSettingsPage() {
                 <p className="text-2xl font-bold">Professional</p>
                 <p className="text-sm text-muted-foreground">$79/month</p>
               </div>
-              <Badge>Active</Badge>
+              <Badge variant="success">Active</Badge>
             </div>
-            <Button variant="outline">Upgrade plan</Button>
+            <UpgradePlanButton />
           </CardContent>
         </Card>
 
@@ -34,7 +36,7 @@ export default function BillingSettingsPage() {
           <CardContent className="space-y-4">
             <p className="text-sm">Visa ending in 4242</p>
             <p className="text-sm text-muted-foreground">Expires 12/2027</p>
-            <Button variant="outline">Update payment method</Button>
+            <UpdatePaymentButton />
           </CardContent>
         </Card>
       </div>

@@ -5,7 +5,9 @@ import { DashboardLayout } from "@/components/layout/dashboard-layout";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { mockLeads } from "@/constants/mock-data";
+import { leadStatusVariants } from "@/constants/status-variants";
+import { getLeadById } from "@/lib/data/leads.repository";
+import { dashboardMetadata } from "@/lib/metadata";
 import { ROUTES } from "@/constants/routes";
 import { formatCurrency, formatDate } from "@/utils/format";
 
@@ -15,13 +17,15 @@ interface LeadDetailPageProps {
 
 export async function generateMetadata({ params }: LeadDetailPageProps) {
   const { leadId } = await params;
-  const lead = mockLeads.find((l) => l.id === leadId);
-  return { title: lead ? `${lead.name} — Lead` : "Lead Not Found" };
+  const lead = getLeadById(leadId);
+  return dashboardMetadata(
+    lead ? `${lead.name} — Lead` : "Lead Not Found"
+  );
 }
 
 export default async function LeadDetailPage({ params }: LeadDetailPageProps) {
   const { leadId } = await params;
-  const lead = mockLeads.find((l) => l.id === leadId);
+  const lead = getLeadById(leadId);
 
   if (!lead) notFound();
 
@@ -39,7 +43,9 @@ export default async function LeadDetailPage({ params }: LeadDetailPageProps) {
           <CardHeader>
             <div className="flex items-center justify-between">
               <CardTitle>Lead Details</CardTitle>
-              <Badge>{lead.status}</Badge>
+              <Badge variant={leadStatusVariants[lead.status]}>
+                {lead.status}
+              </Badge>
             </div>
           </CardHeader>
           <CardContent className="space-y-4">

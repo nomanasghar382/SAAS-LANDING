@@ -1,6 +1,6 @@
 import { DashboardLayout } from "@/components/layout/dashboard-layout";
+import { TeamActions } from "@/features/settings/components/team-actions";
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
 import {
   Table,
   TableBody,
@@ -9,10 +9,12 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { dashboardMetadata } from "@/lib/metadata";
 
-export const metadata = {
-  title: "Team Settings",
-};
+export const metadata = dashboardMetadata(
+  "Team Settings",
+  "Manage team members and roles"
+);
 
 const teamMembers = [
   { name: "John Doe", email: "john@company.com", role: "Owner" },
@@ -25,7 +27,7 @@ export default function TeamSettingsPage() {
     <DashboardLayout title="Team" description="Manage team members and roles">
       <div className="space-y-4">
         <div className="flex justify-end">
-          <Button>Invite member</Button>
+          <TeamActions />
         </div>
         <div className="rounded-xl border bg-card">
           <Table>

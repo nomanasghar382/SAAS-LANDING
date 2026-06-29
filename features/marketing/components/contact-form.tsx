@@ -3,6 +3,7 @@
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
+import { toast } from "@/lib/toast";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -25,9 +26,23 @@ export function ContactForm() {
     resolver: zodResolver(contactSchema),
   });
 
-  const onSubmit = async () => {
-    await new Promise((resolve) => setTimeout(resolve, 800));
-    reset();
+  const onSubmit = async (data: ContactFormData) => {
+    try {
+      const response = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data),
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to send message");
+      }
+
+      toast.success("Message sent", "We'll get back to you within 24 hours.");
+      reset();
+    } catch {
+      toast.error("Failed to send", "Please try again in a moment.");
+    }
   };
 
   if (isSubmitSuccessful) {

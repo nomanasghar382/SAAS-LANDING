@@ -1,12 +1,13 @@
 import { NextResponse } from "next/server";
-import { campaignMetrics, mockCampaigns } from "@/constants/mock-data";
+import { getCampaignById } from "@/lib/data/campaigns.repository";
+import { getCampaignMetrics } from "@/lib/data/dashboard.repository";
 
 export async function GET(
   _request: Request,
   { params }: { params: Promise<{ campaignId: string }> }
 ) {
   const { campaignId } = await params;
-  const campaign = mockCampaigns.find((c) => c.id === campaignId);
+  const campaign = getCampaignById(campaignId);
 
   if (!campaign) {
     return NextResponse.json(
@@ -15,5 +16,5 @@ export async function GET(
     );
   }
 
-  return NextResponse.json({ ...campaign, metrics: campaignMetrics });
+  return NextResponse.json({ ...campaign, metrics: getCampaignMetrics() });
 }

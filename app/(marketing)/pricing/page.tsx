@@ -11,9 +11,12 @@ import {
 } from "@/components/ui/card";
 import { ROUTES } from "@/constants/routes";
 
-export const metadata = {
-  title: "Pricing",
-};
+import { marketingMetadata } from "@/lib/metadata";
+
+export const metadata = marketingMetadata(
+  "Pricing",
+  "Simple, transparent pricing for sales teams of every size."
+);
 
 const plans = [
   {
@@ -56,7 +59,7 @@ const plans = [
 
 export default function PricingPage() {
   return (
-    <div className="py-20">
+    <div className="py-20 sm:py-24">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="mx-auto max-w-2xl text-center">
           <h1 className="text-4xl font-bold tracking-tight">

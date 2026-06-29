@@ -1,16 +1,18 @@
 import { DashboardLayout } from "@/components/layout/dashboard-layout";
 import { EmptyState } from "@/components/shared/empty-state";
 import { LeadCard } from "@/features/leads/components/lead-card";
+import { getLeads } from "@/lib/data/leads.repository";
+import { dashboardMetadata } from "@/lib/metadata";
 import { ROUTES } from "@/constants/routes";
-import { mockLeads } from "@/constants/mock-data";
 import { UserCircle } from "lucide-react";
 
-export const metadata = {
-  title: "Customers",
-};
+export const metadata = dashboardMetadata(
+  "Customers",
+  "View and manage your customer relationships"
+);
 
 export default function CustomersPage() {
-  const customers = mockLeads.filter((lead) => lead.status === "won");
+  const { data: customers } = getLeads({ status: "won" });
 
   return (
     <DashboardLayout
@@ -27,7 +29,7 @@ export default function CustomersPage() {
       ) : (
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {customers.map((lead) => (
-            <LeadCard key={lead.id} lead={lead} />
+            <LeadCard key={lead.id} lead={lead} href={`${ROUTES.leads}/${lead.id}`} />
           ))}
         </div>
       )}

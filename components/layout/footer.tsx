@@ -9,8 +9,8 @@ const footerLinks = {
     { title: "Contact", href: ROUTES.contact },
   ],
   legal: [
-    { title: "Privacy", href: "#" },
-    { title: "Terms", href: "#" },
+    { title: "Privacy", href: ROUTES.privacy },
+    { title: "Terms", href: ROUTES.terms },
   ],
 };
 

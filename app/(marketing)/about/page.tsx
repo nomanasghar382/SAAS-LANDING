@@ -1,6 +1,9 @@
-export const metadata = {
-  title: "About",
-};
+import { marketingMetadata } from "@/lib/metadata";
+
+export const metadata = marketingMetadata(
+  "About",
+  "Learn about SellPilot AI and our mission to transform sales."
+);
 
 const values = [
   {
@@ -22,7 +25,7 @@ const values = [
 
 export default function AboutPage() {
   return (
-    <div className="py-20">
+    <div className="py-20 sm:py-24">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="mx-auto max-w-3xl">
           <h1 className="text-4xl font-bold tracking-tight">

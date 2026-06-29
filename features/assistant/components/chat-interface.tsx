@@ -101,7 +101,7 @@ export function ChatInterface() {
           </div>
         )}
 
-        <div className="mx-auto max-w-2xl space-y-4">
+        <div className="mx-auto max-w-2xl space-y-4" aria-live="polite" aria-relevant="additions">
           {messages.map((message) => (
             <MessageBubble
               key={message.id}

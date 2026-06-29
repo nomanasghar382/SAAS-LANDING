@@ -40,7 +40,10 @@ export function LoginForm() {
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
       {errors.root && (
-        <p className="rounded-lg bg-destructive/10 px-3 py-2 text-sm text-destructive">
+        <p
+          className="rounded-lg bg-destructive/10 px-3 py-2 text-sm text-destructive"
+          role="alert"
+        >
           {errors.root.message}
         </p>
       )}
@@ -52,10 +55,13 @@ export function LoginForm() {
           type="email"
           placeholder="you@company.com"
           error={!!errors.email}
+          aria-invalid={!!errors.email}
           {...register("email")}
         />
         {errors.email && (
-          <p className="text-xs text-destructive">{errors.email.message}</p>
+          <p className="text-xs text-destructive" role="alert">
+            {errors.email.message}
+          </p>
         )}
       </div>
 
@@ -74,10 +80,13 @@ export function LoginForm() {
           type="password"
           placeholder="••••••••"
           error={!!errors.password}
+          aria-invalid={!!errors.password}
           {...register("password")}
         />
         {errors.password && (
-          <p className="text-xs text-destructive">{errors.password.message}</p>
+          <p className="text-xs text-destructive" role="alert">
+            {errors.password.message}
+          </p>
         )}
       </div>
 

@@ -17,7 +17,10 @@ export function CampaignCard({ campaign }: CampaignCardProps) {
   const conversionRate = getConversionRate(campaign.leads, campaign.conversions);
 
   return (
-    <Link href={`${ROUTES.campaigns}/${campaign.id}`}>
+    <Link
+      href={`${ROUTES.campaigns}/${campaign.id}`}
+      className="block h-full rounded-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+    >
       <Card variant="interactive" className="h-full">
         <CardHeader className="pb-3">
           <div className="flex items-start justify-between gap-2">
@@ -66,10 +69,14 @@ export function CampaignCard({ campaign }: CampaignCardProps) {
 
           <div>
             <div className="mb-1.5 flex items-center justify-between text-xs">
-              <span className="text-muted-foreground">Open rate</span>
-              <span className="font-medium">{campaign.openRate}%</span>
+              <span className="text-muted-foreground">Conversion rate</span>
+              <span className="font-medium">{conversionRate}%</span>
             </div>
-            <Progress value={campaign.openRate} indicatorClassName="bg-primary" />
+            <Progress
+              value={Number(conversionRate)}
+              indicatorClassName="bg-emerald-500"
+              aria-label={`Conversion rate ${conversionRate}%`}
+            />
           </div>
 
           <div className="flex items-center justify-between rounded-lg bg-muted/40 px-3 py-2.5">

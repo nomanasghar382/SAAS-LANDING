@@ -1,7 +1,9 @@
 "use client";
 
 import { useEffect } from "react";
+import Link from "next/link";
 import { Button } from "@/components/ui/button";
+import { ROUTES } from "@/constants/routes";
 
 export default function Error({
   error,
@@ -21,11 +23,17 @@ export default function Error({
         We hit an unexpected error
       </h1>
       <p className="mt-3 max-w-md text-sm text-muted-foreground">
-        Our team has been notified. Try refreshing the page or return to the dashboard.
+        Try refreshing the page. If the problem persists, return to the dashboard
+        or contact support.
       </p>
+      {error.digest && (
+        <p className="mt-2 font-mono text-xs text-muted-foreground">
+          Error ID: {error.digest}
+        </p>
+      )}
       <div className="mt-8 flex gap-3">
-        <Button variant="outline" onClick={() => window.location.href = "/"}>
-          Go home
+        <Button variant="outline" asChild>
+          <Link href={ROUTES.home}>Go home</Link>
         </Button>
         <Button onClick={reset}>Try again</Button>
       </div>

@@ -5,9 +5,11 @@ import { DashboardLayout } from "@/components/layout/dashboard-layout";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { CampaignAnalytics } from "@/features/campaigns/components/campaign-analytics";
-import { campaignMetrics, mockCampaigns } from "@/constants/mock-data";
-import { ROUTES } from "@/constants/routes";
+import { getCampaignById } from "@/lib/data/campaigns.repository";
+import { getCampaignMetrics } from "@/lib/data/dashboard.repository";
 import { campaignStatusVariants } from "@/constants/status-variants";
+import { dashboardMetadata } from "@/lib/metadata";
+import { ROUTES } from "@/constants/routes";
 import { getConversionRate } from "@/utils/crm";
 import { formatCurrency, formatDate } from "@/utils/format";
 
@@ -17,17 +19,17 @@ interface CampaignDetailPageProps {
 
 export async function generateMetadata({ params }: CampaignDetailPageProps) {
   const { campaignId } = await params;
-  const campaign = mockCampaigns.find((c) => c.id === campaignId);
-  return {
-    title: campaign ? `${campaign.name} — Campaign` : "Campaign Not Found",
-  };
+  const campaign = getCampaignById(campaignId);
+  return dashboardMetadata(
+    campaign ? `${campaign.name} — Campaign` : "Campaign Not Found"
+  );
 }
 
 export default async function CampaignDetailPage({
   params,
 }: CampaignDetailPageProps) {
   const { campaignId } = await params;
-  const campaign = mockCampaigns.find((c) => c.id === campaignId);
+  const campaign = getCampaignById(campaignId);
 
   if (!campaign) notFound();
 
@@ -72,7 +74,7 @@ export default async function CampaignDetailPage({
         ))}
       </div>
 
-      <CampaignAnalytics data={campaignMetrics} />
+      <CampaignAnalytics data={getCampaignMetrics()} />
     </DashboardLayout>
   );
 }

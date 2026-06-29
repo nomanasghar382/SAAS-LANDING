@@ -25,9 +25,14 @@ const iconMap: Record<string, typeof ShoppingBag> = {
 interface IntegrationCardProps {
   integration: Integration;
   onConnect?: (id: string) => void;
+  isConnecting?: boolean;
 }
 
-export function IntegrationCard({ integration, onConnect }: IntegrationCardProps) {
+export function IntegrationCard({
+  integration,
+  onConnect,
+  isConnecting,
+}: IntegrationCardProps) {
   const Icon = iconMap[integration.icon] ?? Users;
   const isConnected = integration.status === "connected";
 
@@ -66,6 +71,8 @@ export function IntegrationCard({ integration, onConnect }: IntegrationCardProps
             variant={isConnected ? "outline" : "default"}
             size="sm"
             onClick={() => onConnect?.(integration.id)}
+            isLoading={isConnecting}
+            disabled={isConnecting}
             className={cn(!isConnected && "shadow-sm")}
           >
             {isConnected ? "Manage" : "Connect"}

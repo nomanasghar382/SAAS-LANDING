@@ -12,7 +12,7 @@ import {
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import type { RevenueDataPoint } from "@/types";
 
-interface RevenueChartProps {
+export interface RevenueChartProps {
   data: RevenueDataPoint[];
   title?: string;
 }

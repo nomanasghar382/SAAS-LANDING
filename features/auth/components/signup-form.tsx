@@ -37,7 +37,10 @@ export function SignupForm() {
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
       {errors.root && (
-        <p className="rounded-lg bg-destructive/10 px-3 py-2 text-sm text-destructive">
+        <p
+          className="rounded-lg bg-destructive/10 px-3 py-2 text-sm text-destructive"
+          role="alert"
+        >
           {errors.root.message}
         </p>
       )}
@@ -48,10 +51,13 @@ export function SignupForm() {
           id="name"
           placeholder="John Doe"
           error={!!errors.name}
+          aria-invalid={!!errors.name}
           {...register("name")}
         />
         {errors.name && (
-          <p className="text-xs text-destructive">{errors.name.message}</p>
+          <p className="text-xs text-destructive" role="alert">
+            {errors.name.message}
+          </p>
         )}
       </div>
 

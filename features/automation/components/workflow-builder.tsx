@@ -15,6 +15,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
 import { defaultWorkflow } from "@/constants/mock-data";
+import { toast } from "@/lib/toast";
 import type { WorkflowNode, WorkflowNodeType } from "@/types";
 
 const nodeConfig: Record<
@@ -105,11 +106,22 @@ export function WorkflowBuilder() {
           </p>
         </div>
         <div className="flex gap-2">
-          <Button variant="outline" size="sm">
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() =>
+              toast.success("Test run started", "Workflow executed successfully in sandbox.")
+            }
+          >
             <Play className="h-4 w-4" />
             Test Run
           </Button>
-          <Button size="sm">
+          <Button
+            size="sm"
+            onClick={() =>
+              toast.success("Workflow activated", "Your automation is now live.")
+            }
+          >
             <Zap className="h-4 w-4" />
             Activate
           </Button>

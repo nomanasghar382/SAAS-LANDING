@@ -75,6 +75,7 @@ export function LeadTable({
                   "cursor-pointer select-none ds-transition hover:text-foreground",
                   (col.field === "value" || col.field === "score") && "text-right"
                 )}
+                aria-label={`Sort by ${col.label}`}
                 onClick={() => onSortChange(col.field)}
                 onKeyDown={(e) => {
                   if (e.key === "Enter" || e.key === " ") {
@@ -111,7 +112,10 @@ export function LeadTable({
                 className="cursor-pointer"
                 onClick={() => onLeadSelect(lead)}
                 onKeyDown={(e) => {
-                  if (e.key === "Enter") onLeadSelect(lead);
+                  if (e.key === "Enter" || e.key === " ") {
+                    e.preventDefault();
+                    onLeadSelect(lead);
+                  }
                 }}
                 tabIndex={0}
                 role="button"

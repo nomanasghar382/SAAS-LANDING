@@ -5,6 +5,7 @@ import { ChevronLeft, ChevronRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { SidebarNav } from "./sidebar-nav";
 import { cn } from "@/lib/utils";
+import { ROUTES } from "@/constants/routes";
 import { useUiStore } from "@/store/ui-store";
 
 export function Sidebar() {
@@ -45,14 +46,17 @@ export function Sidebar() {
 
       {!sidebarCollapsed && (
         <div className="border-t border-sidebar-border p-4">
-          <div className="rounded-lg bg-sidebar-border/50 p-3">
+          <Link
+            href={ROUTES.settingsBilling}
+            className="block rounded-lg bg-sidebar-border/50 p-3 ds-transition hover:bg-sidebar-border/70 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sidebar-ring"
+          >
             <p className="text-xs font-medium text-sidebar-foreground/80">
               Pro Plan
             </p>
             <p className="mt-1 text-xs text-sidebar-foreground/50">
               Upgrade for unlimited AI credits
             </p>
-          </div>
+          </Link>
         </div>
       )}
     </aside>

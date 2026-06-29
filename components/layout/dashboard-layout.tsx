@@ -1,11 +1,15 @@
 "use client";
 
+import { useRouter } from "next/navigation";
 import { Bell, Search } from "lucide-react";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { ThemeToggle } from "@/components/shared/theme-toggle";
+import { UserMenu } from "@/components/layout/user-menu";
+import { ROUTES } from "@/constants/routes";
+import { toast } from "@/lib/toast";
 
 interface DashboardLayoutProps {
   children: React.ReactNode;
@@ -18,6 +22,15 @@ export function DashboardLayout({
   title,
   description,
 }: DashboardLayoutProps) {
+  const router = useRouter();
+  const [search, setSearch] = useState("");
+
+  const handleSearch = () => {
+    const query = search.trim();
+    if (!query) return;
+    router.push(`${ROUTES.leads}?search=${encodeURIComponent(query)}`);
+  };
+
   return (
     <div className="flex min-h-0 flex-1 flex-col overflow-hidden">
       <header className="flex h-14 shrink-0 items-center justify-between border-b bg-background/95 px-4 backdrop-blur-sm sm:h-16 sm:px-6">
@@ -34,6 +47,14 @@ export function DashboardLayout({
               id="dashboard-search"
               placeholder="Search leads, campaigns..."
               className="pl-9"
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === "Enter") {
+                  e.preventDefault();
+                  handleSearch();
+                }
+              }}
             />
           </div>
           {title && (
@@ -49,15 +70,14 @@ export function DashboardLayout({
             variant="ghost"
             size="icon"
             className="relative"
-            aria-label="Notifications, 1 unread"
+            aria-label="Notifications"
+            onClick={() =>
+              toast.info("Notifications", "You're all caught up for now.")
+            }
           >
             <Bell className="h-5 w-5" aria-hidden="true" />
-            <span className="absolute right-2 top-2 h-2 w-2 rounded-full bg-primary" />
           </Button>
-          <Avatar className="h-8 w-8 cursor-pointer sm:h-9 sm:w-9">
-            <AvatarImage src="/avatars/user.jpg" alt="John Doe profile" />
-            <AvatarFallback>JD</AvatarFallback>
-          </Avatar>
+          <UserMenu />
         </div>
       </header>
 
