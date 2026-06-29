@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { Badge } from "@/components/ui/badge";
 import {
   Table,
@@ -7,6 +8,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { ROUTES } from "@/constants/routes";
 import { formatCurrency, formatDate } from "@/utils/format";
 import type { Lead, LeadStatus } from "@/types";
 
@@ -24,10 +26,9 @@ const statusVariants: Record<
 
 interface LeadTableProps {
   leads: Lead[];
-  onLeadClick?: (lead: Lead) => void;
 }
 
-export function LeadTable({ leads, onLeadClick }: LeadTableProps) {
+export function LeadTable({ leads }: LeadTableProps) {
   return (
     <div className="rounded-xl border bg-card">
       <Table>
@@ -44,18 +45,19 @@ export function LeadTable({ leads, onLeadClick }: LeadTableProps) {
         </TableHeader>
         <TableBody>
           {leads.map((lead) => (
-            <TableRow
-              key={lead.id}
-              className={onLeadClick ? "cursor-pointer" : undefined}
-              onClick={() => onLeadClick?.(lead)}
-            >
+            <TableRow key={lead.id} className="cursor-pointer">
               <TableCell>
-                <div>
+                <Link
+                  href={`${ROUTES.leads}/${lead.id}`}
+                  className="block"
+                >
                   <p className="font-medium">{lead.name}</p>
                   <p className="text-xs text-muted-foreground">{lead.email}</p>
-                </div>
+                </Link>
               </TableCell>
-              <TableCell>{lead.company}</TableCell>
+              <TableCell>
+                <Link href={`${ROUTES.leads}/${lead.id}`}>{lead.company}</Link>
+              </TableCell>
               <TableCell>
                 <Badge variant={statusVariants[lead.status]}>
                   {lead.status}

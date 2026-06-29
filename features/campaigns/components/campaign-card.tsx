@@ -1,6 +1,8 @@
+import Link from "next/link";
 import { Calendar, Target, TrendingUp, Users } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { ROUTES } from "@/constants/routes";
 import { formatCurrency, formatDate } from "@/utils/format";
 import type { Campaign, CampaignStatus } from "@/types";
 
@@ -16,20 +18,17 @@ const statusVariants: Record<
 
 interface CampaignCardProps {
   campaign: Campaign;
-  onClick?: () => void;
 }
 
-export function CampaignCard({ campaign, onClick }: CampaignCardProps) {
+export function CampaignCard({ campaign }: CampaignCardProps) {
   const conversionRate =
     campaign.leads > 0
       ? ((campaign.conversions / campaign.leads) * 100).toFixed(1)
       : "0";
 
   return (
-    <Card
-      className={onClick ? "cursor-pointer transition-shadow hover:shadow-md" : undefined}
-      onClick={onClick}
-    >
+    <Link href={`${ROUTES.campaigns}/${campaign.id}`}>
+      <Card className="h-full cursor-pointer transition-shadow hover:shadow-md">
       <CardHeader className="pb-3">
         <div className="flex items-start justify-between gap-2">
           <CardTitle className="text-base leading-tight">
@@ -80,5 +79,6 @@ export function CampaignCard({ campaign, onClick }: CampaignCardProps) {
         </div>
       </CardContent>
     </Card>
+    </Link>
   );
 }

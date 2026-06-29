@@ -49,3 +49,13 @@
     font-family: var(--font-sans), system-ui, sans-serif;
   }
 }
+
+@layer utilities {
+  .glass {
+    @apply border border-white/10 bg-white/10 backdrop-blur-xl;
+  }
+
+  .glass-dark {
+    @apply border border-white/5 bg-black/20 backdrop-blur-xl;
+  }
+}

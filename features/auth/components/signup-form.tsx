@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { ROUTES } from "@/constants/routes";
+import { authService } from "@/services/auth.service";
 import { signupSchema, type SignupFormData } from "../schemas/signup.schema";
 
 export function SignupForm() {
@@ -15,18 +16,32 @@ export function SignupForm() {
   const {
     register,
     handleSubmit,
+    setError,
     formState: { errors, isSubmitting },
   } = useForm<SignupFormData>({
     resolver: zodResolver(signupSchema),
   });
 
-  const onSubmit = async () => {
-    await new Promise((resolve) => setTimeout(resolve, 800));
+  const onSubmit = async (data: SignupFormData) => {
+    const result = await authService.login(data.email, data.password);
+
+    if (result?.error) {
+      setError("root", { message: "Unable to create account. Please try again." });
+      return;
+    }
+
     router.push(ROUTES.dashboard);
+    router.refresh();
   };
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+      {errors.root && (
+        <p className="rounded-lg bg-destructive/10 px-3 py-2 text-sm text-destructive">
+          {errors.root.message}
+        </p>
+      )}
+
       <div className="space-y-2">
         <Label htmlFor="name">Full name</Label>
         <Input
